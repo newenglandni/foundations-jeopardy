@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Foundations Jeopardy</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Milady Foundations Review</p>
+          <h1>Foundations Jeopardy</h1>
+        </div>
+        <div class="scoreboard">
+          <div class="score-box">
+            <span>Score</span>
+            <strong id="score">0</strong>
+          </div>
+          <button id="instructions-toggle" class="instructions-btn" aria-expanded="true" aria-controls="instructions-panel">
+            How to Play
+          </button>
+          <button id="music-toggle" class="instructions-btn" aria-pressed="false">Music: Off</button>
+          <button id="reset-game" class="reset-btn">Reset Board</button>
+        </div>
+      </header>
+
+      <section id="instructions-panel" class="instructions-panel" aria-labelledby="instructions-title">
+        <div>
+          <p class="eyebrow">Quick start</p>
+          <h2 id="instructions-title">How to Play</h2>
+          <ol>
+            <li>Choose a level. Level 1 covers Part 1, Level 2 covers Part 2, and Level 3 covers Part 3.</li>
+            <li>Select a category and point value to open a clue.</li>
+            <li>Listen to the narrated question, or use <strong>Read Question Aloud</strong> if you need to hear it again.</li>
+            <li>When the answer appears, mark <strong>Correct</strong> to add the clue value or <strong>Incorrect</strong> to subtract it. Scores cannot go below zero.</li>
+            <li>Close the clue after scoring. Used clues are marked with a check and cannot be played again.</li>
+            <li>You have 5 seconds to answer. The game announces time’s up and reveals the answer automatically when the timer reaches zero.</li>
+            <li>Incorrect and timed-out questions are saved for a study review that appears after all clues have been played.</li>
+            <li>After the answer is read aloud, it remains on screen for five seconds before the next clue is ready.</li>
+          </ol>
+          <p class="instructions-note"><strong>Audio:</strong> Narration starts when a clue opens. Music and sound effects may be muted with the Music button. Use Reset Board to start over.</p>
+        </div>
+      </section>
+
+      <nav class="level-tabs" id="level-tabs" aria-label="Game levels"></nav>
+
+      <main id="game-board" class="game-board" aria-live="polite"></main>
+      <section id="review-panel" class="review-panel hidden" aria-labelledby="review-title"></section>
+    </div>
+
+    <div id="clue-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-card">
+        <button id="close-modal" class="close-modal" aria-label="Close clue">×</button>
+        <p id="modal-level" class="modal-level"></p>
+        <h2 id="modal-title">Question</h2>
+        <div class="timer-row">
+          <span>Time to answer</span>
+          <strong id="timer">5</strong>
+          <span>seconds</span>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+        <button id="read-question" class="secondary-btn" type="button">Read Question Aloud</button>
+        <div id="answer-controls" class="modal-actions hidden">
+          <button id="show-answer" class="primary-btn">Reveal Answer</button>
+          <button id="mark-correct" class="success-btn">Correct</button>
+          <button id="mark-incorrect" class="danger-btn">Incorrect</button>
+        </div>
+        <div id="answer-box" class="answer-box hidden"></div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
