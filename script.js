@@ -182,10 +182,12 @@ function loadPreferredVoice() {
   if (!('speechSynthesis' in window)) return;
   const voices = window.speechSynthesis.getVoices();
   const englishVoices = voices.filter((voice) => voice.lang.toLowerCase().startsWith('en'));
-  const premiumNaturalNames = /natural|neural|premium|enhanced|studio|google uk english male|microsoft guy|microsoft ryan|daniel|alex|reed|eddy|rocko/i;
-  const naturalMaleNames = /daniel|alex|reed|eddy|rocko|david|fred|george|james|guy|ryan|male/i;
+  const premiumNaturalNames = /natural|neural|premium|enhanced|studio|google uk english male|microsoft guy|microsoft ryan|daniel|alex|reed|eddy|rocko|christopher|eric|brian|aaron|thomas|tom/i;
+  const naturalMaleNames = /daniel|alex|reed|eddy|rocko|david|fred|george|james|guy|ryan|christopher|eric|brian|aaron|thomas|tom|male/i;
   const likelyFemaleNames = /samantha|victoria|karen|zira|susan|female/i;
-  preferredVoice = englishVoices.find((voice) => premiumNaturalNames.test(voice.name) && naturalMaleNames.test(voice.name)) ||
+  preferredVoice = englishVoices.find((voice) => !voice.localService && premiumNaturalNames.test(voice.name) && naturalMaleNames.test(voice.name)) ||
+    englishVoices.find((voice) => !voice.localService && naturalMaleNames.test(voice.name)) ||
+    englishVoices.find((voice) => premiumNaturalNames.test(voice.name) && naturalMaleNames.test(voice.name)) ||
     englishVoices.find((voice) => premiumNaturalNames.test(voice.name)) ||
     englishVoices.find((voice) => naturalMaleNames.test(voice.name)) ||
     englishVoices.find((voice) => !likelyFemaleNames.test(voice.name) && voice.lang.toLowerCase() === 'en-us') ||
