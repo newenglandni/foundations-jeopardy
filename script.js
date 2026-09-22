@@ -171,7 +171,8 @@ const reviewPanel = document.getElementById('review-panel');
 
 let activeClue = null;
 let timerId = null;
-let secondsRemaining = 5;
+const ANSWER_TIME_SECONDS = 10;
+let secondsRemaining = ANSWER_TIME_SECONDS;
 let audioContext = null;
 let musicTimerId = null;
 let musicEnabled = false;
@@ -181,9 +182,12 @@ function loadPreferredVoice() {
   if (!('speechSynthesis' in window)) return;
   const voices = window.speechSynthesis.getVoices();
   const englishVoices = voices.filter((voice) => voice.lang.toLowerCase().startsWith('en'));
-  const naturalMaleNames = /reed|eddy|rocko|natural|neural|enhanced|daniel|alex|david|fred|george|james|google uk english male|microsoft guy|microsoft ryan/i;
+  const premiumNaturalNames = /natural|neural|premium|enhanced|studio|google uk english male|microsoft guy|microsoft ryan|daniel|alex|reed|eddy|rocko/i;
+  const naturalMaleNames = /daniel|alex|reed|eddy|rocko|david|fred|george|james|guy|ryan|male/i;
   const likelyFemaleNames = /samantha|victoria|karen|zira|susan|female/i;
-  preferredVoice = englishVoices.find((voice) => naturalMaleNames.test(voice.name)) ||
+  preferredVoice = englishVoices.find((voice) => premiumNaturalNames.test(voice.name) && naturalMaleNames.test(voice.name)) ||
+    englishVoices.find((voice) => premiumNaturalNames.test(voice.name)) ||
+    englishVoices.find((voice) => naturalMaleNames.test(voice.name)) ||
     englishVoices.find((voice) => !likelyFemaleNames.test(voice.name) && voice.lang.toLowerCase() === 'en-us') ||
     englishVoices.find((voice) => !likelyFemaleNames.test(voice.name)) ||
     englishVoices[0];
@@ -243,7 +247,7 @@ function speak(text, announce = false, onComplete = null) {
       clearTimeout(fallbackTimer);
       onComplete();
     };
-    const estimatedDuration = Math.max(1200, Math.min(4500, text.split(/\s+/).length * 190));
+    const estimatedDuration = Math.max(1800, text.split(/\s+/).length * 230);
     const fallbackTimer = setTimeout(completeOnce, estimatedDuration);
     utterance.onend = completeOnce;
     utterance.onerror = completeOnce;
@@ -272,7 +276,7 @@ function updateTimer() {
 
 function startTimer() {
   stopTimer();
-  secondsRemaining = 5;
+  secondsRemaining = ANSWER_TIME_SECONDS;
   updateTimer();
   timerId = setInterval(() => {
     secondsRemaining -= 1;
@@ -426,7 +430,7 @@ function openModal(categoryName, value) {
   answerBox.classList.add('hidden');
   answerControls.classList.add('hidden');
   modal.classList.remove('hidden');
-  secondsRemaining = 5;
+  secondsRemaining = ANSWER_TIME_SECONDS;
   updateTimer();
   getAudioContext();
   speak(`For ${value} points: ${clue.question}`, false, () => {
